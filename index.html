@@ -1,12 +1,13 @@
 <!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>گزارش کار انبار شمش V7.2</title><style>
 *{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#182c47;font-family:Tahoma,Arial,sans-serif;padding-bottom:95px}button,input,textarea,select{font:inherit}button{border:0;cursor:pointer}header{background:linear-gradient(110deg,#27313a,#f16d00);color:#fff;padding:38px 16px 27px;border-radius:0 0 25px 25px;text-align:center}h1{font-size:25px}.wrap{padding:16px;max-width:780px;margin:auto}.alert{background:#fff3df;color:#79501c;border:1px solid #f2d9a9;padding:14px;border-radius:15px;line-height:2;margin:12px 0}.card{background:white;border-radius:18px;padding:17px;margin:15px 0;box-shadow:0 4px 17px #2034510d}.section{padding:16px;border-radius:20px;margin:15px 0}.bluebg{background:#eaf2ff}.peach{background:#fff4e8}.greenbg{background:#e9f8ec}.pink{background:#ffeef1}.violet{background:#f2edff}h2{font-size:20px}h3{font-size:17px}label{display:block;margin:12px 0 6px;font-weight:bold}input,select,textarea{width:100%;padding:12px;border:1px solid #c9d4e2;border-radius:12px;background:#fff;color:#17283d;min-width:0}textarea{min-height:105px}.row{display:flex;gap:8px}.row>*{flex:1;min-width:0}.btn{padding:13px;border-radius:12px;background:#166ad2;color:#fff;font-weight:bold}.btn.green{background:#1d9a5a}.btn.red{background:#c93039;padding:9px}.btn.wide{width:100%;margin:10px 0}.shiftgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.shift{padding:19px 0;border-radius:12px;color:#fff;font-weight:bold}.selected{outline:3px solid #253a59;outline-offset:2px}.phase{background:#e9e9ef;color:#303c4c}.phase.active{background:#7043b6;color:#fff}.action{display:block;width:100%;padding:20px 15px;text-align:right;color:white;font-size:18px;font-weight:bold;border-radius:17px;margin:12px 0;background:#1966c9}.orange{background:#ee7a16}.purple{background:#7041bb}.small{font-size:12px;color:#61728a;line-height:2}.muted{color:#65768c}.minirow{display:grid;grid-template-columns:1.05fr .8fr 1fr 40px;gap:4px;margin:8px 0}.minirow input,.minirow select{padding:8px 4px;font-size:13px}.minirow select{font-size:12px}.minirow{grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr) minmax(0,1fr) 40px}.manage{margin-top:12px}.manage textarea{min-height:150px}.hint{font-size:12px;color:#586a82;line-height:1.8}.check{display:flex;align-items:center;gap:9px}.check input{width:22px;height:22px}.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;box-shadow:0 -4px 18px #142a4017;padding:10px 4px 14px;z-index:4}.nav button{flex:1;background:transparent;color:#647287;padding:7px 2px;font-size:13px}.nav button.active{color:#1464be;font-weight:bold;background:#edf5ff;border-radius:12px}.nav span{display:block;font-size:22px;margin-bottom:4px}.top{background:#185eb3;color:#fff;padding:16px;font-size:20px;display:flex;gap:12px;align-items:center}.top button{background:#2875d0;color:#fff;padding:8px 13px;border-radius:10px}.error{margin:12px;padding:12px;border:2px solid #e44;background:#fff;color:#a11;white-space:pre-wrap;direction:ltr;text-align:left}
+.report-tabs{margin:14px 0;gap:8px}.report-tabs .btn{flex:1;background:#586a7e;color:white;padding:12px 4px;font-size:14px}.report-tabs .btn.active{background:#7040b8}.report-detail{margin:12px 0;text-align:right;line-height:2}.report-detail p{margin:9px 0}.report-heading{color:#1766bd;font-size:17px;line-height:1.9}.report-delete{background:#c93030!important;color:white;width:100%;margin-top:12px}.report-detail strong{font-weight:700}
 </style></head><body>
 <div id="view"><main class="wrap" style="min-height:75vh;display:flex;align-items:center;justify-content:center"><div class="card" role="status" aria-live="polite" style="text-align:center;width:100%;max-width:420px"><h2>گزارش کار انبار شمش</h2><p class="muted">در حال بررسی ورود...</p></div></main></div>
 <nav class="nav" style="display:none"><button data-page="home" onclick="go('home')"><span>⌂</span>خانه</button><button data-page="reports" onclick="go('reports')"><span>▤</span>گزارش‌ها</button><button data-page="stats" onclick="go('stats')"><span>▥</span>آمار</button><button data-page="settings" onclick="go('settings')"><span>⚙</span>تنظیمات</button></nav><div id="diagnostic" aria-live="polite"></div>
 <script>
 (function(){'use strict';
-const el=id=>document.getElementById(id),warning='<div class="alert">نسخه V7.2 — گزارش‌ها به سرور مشترک اندروید متصل شده‌اند. امنیت نشست وب هنوز نیازمند توکن معتبر سمت سرور است؛ تا تکمیل آن از داده واقعی حساس استفاده نکنید.</div>';
-let page='boot',access=null,phase='1',shift='D',draft={},reports=[],reportsError='',loadingReports=false,reportFilter='all',marks=[{type:'لیبل',count:'',coupe:'C1'}],cuts=[{type:'شمش',count:'',melt:''}];
+const el=id=>document.getElementById(id),warning='<div class="alert">نسخه V7.3 — گزارش‌ها به سرور مشترک اندروید متصل شده‌اند. امنیت نشست وب هنوز نیازمند توکن معتبر سمت سرور است؛ تا تکمیل آن از داده واقعی حساس استفاده نکنید.</div>';
+let page='boot',access=null,phase='1',shift='D',draft={},reports=[],reportsError='',loadingReports=false,reportFilter='2',marks=[{type:'لیبل',count:'',coupe:'C1'}],cuts=[{type:'شمش',count:'',melt:''}];
 const PHASE1_COUPES=Array.from({length:6},(_,i)=>'C'+(i+1)),PHASE2_COUPES=['D','K','F','H'].flatMap(a=>Array.from({length:8},(_,i)=>a+(i+1)));
 const CUT_TYPES=['شمش','دامی‌بار','ته شمش','خرابی سر و ته'];
 const DEFAULT_OPERATORS=["محمدرضا محمدی", "علیرضا جازندری", "حسین دهنوی", "علی عشقی", "حیدر عارفخانی", "حسین کوندری", "حمیدرضا معاشری", "علی خیرآبادی", "محمد خانی", "محمدرضا شورابی", "محمد حسن سیدآبادی", "مصطفی سیدآبادی", "علی مهربانی", "احمد زرگرانی", "محمد عشقی", "حسین سیدآبادی"];
@@ -34,12 +35,12 @@ if(page==='login')h=topBar('ورود کاربران')+'<main class="wrap"><div c
 if(page==='otp')h=topBar('تأیید شماره موبایل')+'<main class="wrap"><div class="card"><h2>کد تأیید چهاررقمی</h2><p>کد ارسال‌شده به '+esc(pendingMobile)+' را وارد کنید.</p><label for="otpCode">کد چهاررقمی</label><input id="otpCode" inputmode="numeric" autocomplete="one-time-code" maxlength="4" placeholder="••••"><button id="verifyBtn" class="btn green wide" onclick="verifyOtp()">تأیید کد</button><button class="btn secondary wide" onclick="go(&quot;login&quot;)">اصلاح شماره موبایل</button><div id="otpPreview" class="hint" role="status" aria-live="polite"></div></div></main>';
 
 if(page==='operators')h=topBar('مدیریت اپراتورها')+'<main class="wrap">'+warning+'<div class="card"><h2>فهرست اپراتورهای برشکاری</h2><p class="hint">هر نام را در یک خط وارد کنید. این تغییرات فقط روی همین مرورگر ذخیره می‌شوند.</p><textarea id="operatorNames" class="manage">'+esc(operators.join('\n'))+'</textarea><button class="btn green wide" onclick="saveOperators()">ذخیره فهرست اپراتورها</button><button class="btn wide" onclick="resetOperators()">بازگرداندن نام‌های پیش‌فرض</button></div></main>';
-if(page==='reports')h=topBar('گزارش‌ها')+'<main class="wrap"><div class="card"><div class="row"><select id="reportPhase" onchange="setReportFilter(this.value)"><option value="all">همه فازها</option><option value="1">فاز ۱</option><option value="2">فاز ۲</option></select></div><div id="reportList">'+reportCards()+'</div></div></main>';
+if(page==='reports')h=topBar('گزارش‌ها')+'<main class="wrap"><div class="row report-tabs"><button id="filter1" class="btn" onclick="setReportFilter(\'1\')">گزارش‌های فاز ۱</button><button id="filter2" class="btn" onclick="setReportFilter(\'2\')">گزارش‌های فاز ۲</button></div><div id="reportList">'+reportCards()+'</div></div></main>';
 if(page==='stats')h=topBar('آمار گزارش‌ها')+'<main class="wrap"><div class="card"><div id="statsContent">'+statsHtml()+'</div></div></main>';
 if(page==='settings'||page==='notices'||page==='swaps'){let names={settings:'تنظیمات',notices:'اطلاعیه‌ها',swaps:'جانشینی و تعویض شیفت'};h=topBar(names[page])+'<main class="wrap">'+warning+'<div class="card"><h2>'+names[page]+'</h2><p>این بخش در نسخه‌های بعدی تکمیل می‌شود.</p></div>'+(page==='settings'?'<button class="btn secondary wide" onclick="go(&quot;operators&quot;)">⚙ مدیریت نام اپراتورها</button><button class="btn wide" onclick="clearDraft()">پاک‌کردن پیش‌نویس</button>':'')+'</main>'}
 
 el('view').innerHTML=h}
-window.go=safe(p=>{if(access&&['home','form','reports','stats','settings','notices','swaps'].includes(p))checkDevice().catch(()=>{});if(!access&&!['login','otp','pending','inactive'].includes(p))return;if(p==='form'&&access&&access.role!=='owner'&&access.user_type!=='shift')return;if(page==='form'&&p!=='form')stash();page=p;render();if(p==='reports'||p==='stats')refreshReports();window.scrollTo(0,0)});
+window.go=safe(p=>{if(access&&['home','form','reports','stats','settings','notices','swaps'].includes(p))checkDevice().catch(()=>{});if(!access&&!['login','otp','pending','inactive'].includes(p))return;if(p==='form'&&access&&access.role!=='owner'&&access.user_type!=='shift')return;if(page==='form'&&p!=='form')stash();page=p;render();if(p==='reports'){updateReportTabs();refreshReports()}else if(p==='stats')refreshReports();window.scrollTo(0,0)});
 window.setPhase=safe(p=>{if(!access)return;phase=p;marks.forEach(m=>m.coupe=validCoupe(m.coupe));render()});window.setShift=safe(s=>{if(access&&access.role!=='owner'&&access.shift!==s)return;shift=s;render()});
 window.updateMark=(i,k,v)=>{if(marks[i])marks[i][k]=v};window.updateCut=(i,k,v)=>{if(cuts[i])cuts[i][k]=v};
 window.addMark=safe(()=>{marks.push({type:'لیبل',count:'',coupe:phase==='1'?'C1':'D1'});el('marks').innerHTML=marks.map(markRow).join('')});
@@ -74,11 +75,52 @@ function newReportId(){return crypto.randomUUID?crypto.randomUUID(): 'xxxxxxxx-x
 function nowTehranIso(){return new Date().toISOString()}
 function nowJalali(){const d=new Date();const date=new Intl.DateTimeFormat('fa-IR-u-ca-persian-nu-latn',{timeZone:'Asia/Tehran',year:'numeric',month:'2-digit',day:'2-digit'}).format(d);const time=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Tehran',hour:'2-digit',minute:'2-digit',hour12:false}).format(d);return digits(date)+' — '+time}
 async function api(path,opts={}){const r=await fetch(SB_URL+'/rest/v1/'+path,{...opts,headers:{'apikey':SB_KEY,'x-device-id':browserDeviceId(),...(opts.body?{'Content-Type':'application/json'}:{}),...(opts.headers||{})},cache:'no-store'});let raw=await r.text();let data;try{data=raw?JSON.parse(raw):null}catch{data=raw}if(!r.ok)throw Error((data&&(data.message||data.error))||'خطای سرور '+r.status);return data}
-function reportCards(){if(loadingReports)return '<p>در حال دریافت گزارش‌ها...</p>';if(reportsError)return '<p class="alert">'+esc(reportsError)+'</p>';let rows=reports.filter(r=>reportFilter==='all'||r.phase===reportFilter);if(!rows.length)return '<p class="muted">گزارشی برای نمایش وجود ندارد.</p>';return rows.map(r=>'<div class="card"><b>فاز '+esc(r.phase)+' • شیفت '+esc(r.shift)+' • '+esc(r.jalali||'')+'</b><p>ثبت‌کننده: '+esc(r.reporter_name||'نامشخص')+'</p><p>تولید: '+num(r.produced_melts)+' | بارگیری: '+num(r.loaded_trucks)+' | ارسال به نورد: '+num(r.rolling_count)+'</p><p>مارک‌گذاری: '+(Array.isArray(r.marks)?r.marks.reduce((a,x)=>a+num(x.count),0):0)+' | برشکاری: '+(Array.isArray(r.cuts)?r.cuts.reduce((a,x)=>a+num(x.count),0):0)+'</p>'+(r.notes?'<p>'+esc(r.notes)+'</p>':'')+'</div>').join('')}
+function reportCards(){
+ if(loadingReports)return '<p>در حال دریافت گزارش‌ها...</p>';
+ if(reportsError)return '<p class="alert">'+esc(reportsError)+'</p>';
+ const rows=reports.filter(r=>String(r.phase)===reportFilter);
+ if(!rows.length)return '<p class="muted">هنوز گزارشی برای این فاز ثبت نشده است.</p>';
+ return rows.map(r=>{
+  const jal=String(r.jalali||''), parts=jal.split('—'),date=parts[0].trim(),time=(parts[1]||'').trim();
+  const role=r._reporter_role||'', type=r._reporter_user_type||'';
+  const label=role==='owner'?'سرور':type==='supervisor'?'سرپرست':type==='chief'?'رئیس':type==='expert'?'کارشناس':'تکنسین';
+  const reporter=esc(r.reporter_name||'نام ثبت‌کننده موجود نیست');
+  const marksHtml=(Array.isArray(r.marks)?r.marks:[]).map(m=>'<p>'+esc(m.type||'مارک‌گذاری')+': '+num(m.count)+' ذوب • کوپه '+esc(m.coupe||'—')+'</p>').join('');
+  const cutsHtml=(Array.isArray(r.cuts)?r.cuts:[]).map(c=>'<p>'+esc(c.type||'برش')+' • '+num(c.count)+' عدد • ذوب '+esc(c.melt||'—')+'</p>').join('');
+  const isMine=!!access&&String(r.owner_device_id||'')===browserDeviceId();
+  const canDelete=!!access&&(access.role==='owner'||access.role==='admin');
+  const phase1=String(r.phase)==='1';
+  return '<article class="card report-detail"><h3 class="report-heading">فاز '+esc(r.phase)+' • شیفت '+esc(r.shift)+' • تاریخ '+esc(date)+(time?' • ساعت '+esc(time):'')+'</h3>'+
+   (r.cycle_status?'<p>چرخه کاری: '+esc(r.cycle_status)+'</p>':'')+
+   '<p><strong>'+label+': '+reporter+'</strong>'+(r.is_delegate?' • جانشین شیفت '+esc(r.shift):'')+'</p>'+
+   '<p>تولید: '+num(r.produced_melts)+' ذوب | بارگیری: '+num(r.loaded_trucks)+' دستگاه</p>'+
+   '<p>ارسال به نورد: '+num(r.rolling_count)+' ذوب</p>'+
+   (phase1?'<p>هات شارژ: '+(r.hot_charge?'✓ انجام شد':'✗ انجام نشد')+' | تخلیه باکس: '+(r.box_unloading?'✓ انجام شد':'✗ انجام نشد')+'</p>':'')+
+   marksHtml+'<p>اپراتور برشکاری: '+esc(r.cut_operator||'—')+'</p>'+cutsHtml+
+   (r.notes?'<p>توضیحات: '+esc(r.notes)+'</p>':'')+
+   (isMine?'<p class="hint">این گزارش متعلق به دستگاه شماست؛ ویرایش در نسخه بعدی با تأیید سرور تکمیل می‌شود.</p>':'')+
+   (canDelete?'<button class="btn danger report-delete" onclick="deleteWebReport(\''+esc(r.id||'')+'\')">حذف گزارش</button>':'')+
+   '</article>';
+ }).join('');
+}
 function statsHtml(){if(loadingReports)return '<p>در حال دریافت آمار...</p>';if(reportsError)return '<p class="alert">'+esc(reportsError)+'</p>';const sum=k=>reports.reduce((a,r)=>a+num(r[k]),0);return '<h3>آمار '+reports.length+' گزارش دریافت‌شده</h3><p>تولید ذوب: '+sum('produced_melts')+'</p><p>بارگیری ماشین: '+sum('loaded_trucks')+'</p><p>ارسال به نورد: '+sum('rolling_count')+'</p><p>هات شارژ: '+reports.filter(r=>r.hot_charge).length+'</p><p>تخلیه باکس: '+reports.filter(r=>r.box_unloading).length+'</p><p>مارک‌گذاری: '+reports.reduce((a,r)=>a+(Array.isArray(r.marks)?r.marks.reduce((b,m)=>b+num(m.count),0):0),0)+'</p><p>برشکاری: '+reports.reduce((a,r)=>a+(Array.isArray(r.cuts)?r.cuts.reduce((b,m)=>b+num(m.count),0):0),0)+'</p><p class="small">این آمار بر اساس حداکثر ۲۰۰ گزارش آخر دریافتی است.</p>'}
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&access&&(page==='reports'||page==='stats'))refreshReports()});
-window.setReportFilter=v=>{reportFilter=v;const x=el('reportList');if(x)x.innerHTML=reportCards()};
+window.setReportFilter=v=>{reportFilter=v;updateReportTabs();const x=el('reportList');if(x)x.innerHTML=reportCards()};
+function updateReportTabs(){for(const p of ['1','2']){const b=el('filter'+p);if(b)b.classList.toggle('active',reportFilter===p)}}
 window.refreshReports=async()=>{if(!access)return;loadingReports=true;reportsError='';if(el('reportList'))el('reportList').innerHTML=reportCards();if(el('statsContent'))el('statsContent').innerHTML=statsHtml();try{reports=await api('shift_reports?select=*&order=created_at.desc&limit=200');if(!Array.isArray(reports))throw Error('پاسخ گزارش‌ها نامعتبر است')}catch(e){reportsError=e.message}finally{loadingReports=false;if(el('reportList'))el('reportList').innerHTML=reportCards();if(el('statsContent'))el('statsContent').innerHTML=statsHtml()}};
+
+window.deleteWebReport=async id=>{
+ if(!access||!['owner','admin'].includes(access.role))return alert('مجوز حذف گزارش ندارید.');
+ const r=reports.find(x=>String(x.id)===String(id));if(!r)return;
+ if(!confirm('حذف گزارش فاز '+r.phase+'، شیفت '+r.shift+' در تاریخ '+(r.jalali||'')+'؟\nاین عمل قابل بازگشت نیست.'))return;
+ try{
+  const deleted=await api('shift_reports?id=eq.'+encodeURIComponent(id),{method:'DELETE',headers:{Prefer:'return=representation'}});
+  if(!Array.isArray(deleted)||!deleted.some(x=>String(x.id)===String(id)))throw Error('سرور حذف این گزارش را تأیید نکرد؛ مجوز حذف را بررسی کنید.');
+  reports=reports.filter(x=>String(x.id)!==String(id));
+  const x=el('reportList');if(x)x.innerHTML=reportCards();
+  alert('گزارش حذف شد.');
+ }catch(e){alert('حذف انجام نشد: '+e.message)}
+};
 let submittingReport=false;
 window.submitReport=async()=>{
  if(submittingReport||!access||!(access.role==='owner'||access.user_type==='shift'))return;
@@ -100,7 +142,7 @@ window.submitReport=async()=>{
    try{const fresh=await api('shift_reports?select=*&order=created_at.desc&limit=200');if(!Array.isArray(fresh))throw Error('پاسخ نامعتبر');reports=fresh;if(!fresh.some(r=>r.id===payload.id))syncError='گزارش ثبت شد، ولی در فهرست دریافتی دیده نشد؛ مجوز خواندن سرور را بررسی کنید.'}
    catch(e){syncError='گزارش ثبت شد ولی همگام‌سازی فهرست ناموفق بود: '+e.message}
    localStorage.removeItem('shiftreport_v61_draft');draft={};marks=[{type:'لیبل',count:'',coupe:'C1'}];cuts=[{type:'شمش',count:'',melt:''}];
-   page='reports';render();
+   reportFilter=String(phase);page='reports';render();updateReportTabs();
    if(syncError){reportsError='';const x=el('reportList');if(x)x.insertAdjacentHTML('afterbegin','<p class="alert">'+esc(syncError)+'</p>')}
    else{const x=el('reportList');if(x)x.insertAdjacentHTML('afterbegin','<p class="hint">گزارش با موفقیت ثبت و فهرست خودکار به‌روز شد ✓</p>')}
  }catch(e){

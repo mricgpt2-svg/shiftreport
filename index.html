@@ -7,6 +7,7 @@
 <script>
 (function(){'use strict';
 const el=id=>document.getElementById(id),warning='<div class="alert">نسخه V7.3 — گزارش‌ها به سرور مشترک اندروید متصل شده‌اند. امنیت نشست وب هنوز نیازمند توکن معتبر سمت سرور است؛ تا تکمیل آن از داده واقعی حساس استفاده نکنید.</div>';
+let editingReportId=null, editingOriginal=null;
 let page='boot',access=null,phase='1',shift='D',draft={},reports=[],reportsError='',loadingReports=false,reportFilter='2',marks=[{type:'لیبل',count:'',coupe:'C1'}],cuts=[{type:'شمش',count:'',melt:''}];
 const PHASE1_COUPES=Array.from({length:6},(_,i)=>'C'+(i+1)),PHASE2_COUPES=['D','K','F','H'].flatMap(a=>Array.from({length:8},(_,i)=>a+(i+1)));
 const CUT_TYPES=['شمش','دامی‌بار','ته شمش','خرابی سر و ته'];
@@ -28,7 +29,7 @@ function cutRow(c,i){if(!CUT_TYPES.includes(c.type))c.type='شمش';return '<div
 function stash(){if(!el('produced'))return;['produced','loaded','rolling','operator','notes'].forEach(k=>{if(el(k))draft[k]=el(k).value});['hot','box'].forEach(k=>{if(el(k))draft[k]=el(k).checked});try{localStorage.setItem('shiftreport_v61_draft',JSON.stringify({phase,shift,draft,marks,cuts}))}catch(e){showError(e)}}
 function render(){if(page==='boot'){document.querySelector('.nav').style.display='none';el('view').innerHTML='<main class="wrap" style="min-height:75vh;display:flex;align-items:center;justify-content:center"><div class="card" role="status" aria-live="polite" style="text-align:center;width:100%;max-width:420px"><h2>گزارش کار انبار شمش</h2><p class="muted">در حال بررسی ورود...</p></div></main>';return}if(!access&&!['login','otp','pending','inactive'].includes(page))page='login';document.querySelector('.nav').style.display=access?'flex':'none';document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));let h='';
 if(page==='home')h='<header><h1>گزارش کار انبار شمش</h1><p>مجتمع فولاد خراسان</p></header><main class="wrap"><div class="card">'+esc(access?access.full_name:'')+' • '+esc(access?(access.role==='owner'?'مالک اصلی':access.role):'')+' <button class="btn secondary" onclick="logoutWeb()">خروج</button></div>'+warning+'<div class="card"><h2>انتخاب شیفت</h2><div class="shiftgrid">'+[['A','#1f9b61'],['B','#1768cf'],['C','#f07815'],['D','#6b3db8']].map(x=>'<button class="shift '+(shift===x[0]?'selected':'')+'" style="background:'+x[1]+'" onclick="setShift(\''+x[0]+'\')">شیفت '+x[0]+'</button>').join('')+'</div></div><div class="card"><h2>انتخاب فاز گزارش</h2><div class="row"><button class="btn phase '+(phase==='1'?'active':'')+'" onclick="setPhase(\'1\')">فاز ۱</button><button class="btn phase '+(phase==='2'?'active':'')+'" onclick="setPhase(\'2\')">فاز ۲</button></div></div>'+(access&&(access.role==='owner'||access.user_type==='shift')?'<button class="action" onclick="go(\'form\')">＋ ثبت گزارش فاز '+phase+' • شیفت '+shift+'</button>':'<div class="card"><p class="muted">ثبت گزارش برای نقش شما فعال نیست.</p></div>')+'<button class="action orange" onclick="go(\'notices\')">📢 اطلاعیه‌ها</button><button class="action purple" onclick="go(\'swaps\')">⇄ جانشینی و تعویض شیفت</button><div class="card"><h2>آخرین گزارش‌ها</h2><p class="muted">نمایش گزارش‌های واقعی نیازمند اتصال امن به سرور است.</p></div></main>';
-if(page==='form')h=topBar('ثبت گزارش فاز '+phase+' • شیفت '+shift)+'<main class="wrap">'+warning+'<section class="section bluebg"><h3>⚗ تولید و بارگیری</h3>'+field('produced','تعداد ذوب تولیدشده')+field('loaded','بارگیری ماشین')+'</section><section class="section peach"><h3>▰ ارسال به نورد</h3>'+field('rolling','تعداد ذوب ارسالی')+'</section>'+(phase==='1'?'<section class="section peach"><h3>🔥 عملیات فاز ۱</h3><label class="check"><input id="hot" type="checkbox" '+(draft.hot?'checked':'')+'>هات شارژ انجام شد</label><label class="check"><input id="box" type="checkbox" '+(draft.box?'checked':'')+'>تخلیه باکس انجام شد</label></section>':'')+'<section class="section greenbg"><h3>◆ مارک‌گذاری (لیبل / شابلون)</h3><button class="btn" onclick="addMark()">＋ افزودن مورد</button><div class="small">نوع | تعداد ذوب | کوپه</div><div id="marks">'+marks.map(markRow).join('')+'</div></section><section class="section pink"><h3>✂ برشکاری</h3>'+operatorSelect()+'<div class="small">نوع برش | تعداد | شماره ذوب</div><div id="cuts">'+cuts.map(cutRow).join('')+'</div><button class="btn" style="margin-top:14px" onclick="addCut()">＋ افزودن برش</button></section><section class="section violet"><h3>🔧 اتفاقات / خرابی‌ها / تعمیرات و توضیحات شیفت</h3><textarea id="notes" placeholder="توضیحات شیفت...">'+esc(draft.notes||'')+'</textarea></section><button class="btn green wide" onclick="submitReport()">ثبت و ارسال گزارش به سرور</button><button class="btn wide" onclick="saveDraft()">ذخیره پیش‌نویس روی گوشی</button><p id="submitStatus" class="hint" role="status"></p></main>';
+if(page==='form')h=topBar((editingReportId?'ویرایش گزارش':'ثبت گزارش')+' فاز '+phase+' • شیفت '+shift)+'<main class="wrap">'+warning+'<section class="section bluebg"><h3>⚗ تولید و بارگیری</h3>'+field('produced','تعداد ذوب تولیدشده')+field('loaded','بارگیری ماشین')+'</section><section class="section peach"><h3>▰ ارسال به نورد</h3>'+field('rolling','تعداد ذوب ارسالی')+'</section>'+(phase==='1'?'<section class="section peach"><h3>🔥 عملیات فاز ۱</h3><label class="check"><input id="hot" type="checkbox" '+(draft.hot?'checked':'')+'>هات شارژ انجام شد</label><label class="check"><input id="box" type="checkbox" '+(draft.box?'checked':'')+'>تخلیه باکس انجام شد</label></section>':'')+'<section class="section greenbg"><h3>◆ مارک‌گذاری (لیبل / شابلون)</h3><button class="btn" onclick="addMark()">＋ افزودن مورد</button><div class="small">نوع | تعداد ذوب | کوپه</div><div id="marks">'+marks.map(markRow).join('')+'</div></section><section class="section pink"><h3>✂ برشکاری</h3>'+operatorSelect()+'<div class="small">نوع برش | تعداد | شماره ذوب</div><div id="cuts">'+cuts.map(cutRow).join('')+'</div><button class="btn" style="margin-top:14px" onclick="addCut()">＋ افزودن برش</button></section><section class="section violet"><h3>🔧 اتفاقات / خرابی‌ها / تعمیرات و توضیحات شیفت</h3><textarea id="notes" placeholder="توضیحات شیفت...">'+esc(draft.notes||'')+'</textarea></section><button class="btn green wide" onclick="submitReport()">'+(editingReportId?'ذخیره تغییرات گزارش':'ثبت و ارسال گزارش به سرور')+'</button><button class="btn wide" onclick="saveDraft()">ذخیره پیش‌نویس روی گوشی</button><p id="submitStatus" class="hint" role="status"></p></main>';
 if(page==='pending')h=topBar('در انتظار تأیید مدیر')+'<main class="wrap"><div class="card"><h2>در انتظار تأیید مدیر</h2><p>کد پیامکی تأیید شد، اما این دستگاه هنوز توسط مالک یا مدیر تأیید و فعال نشده است.</p><button class="btn wide" onclick="checkDevice()">بررسی مجدد وضعیت</button><button class="btn secondary wide" onclick="logoutWeb()">خروج</button><p id="deviceStatus" class="hint"></p></div></main>';
 if(page==='inactive')h=topBar('دستگاه غیرفعال')+'<main class="wrap"><div class="card"><h2>دسترسی غیرفعال است</h2><p>این دستگاه توسط مدیر غیرفعال یا رد شده است.</p><button class="btn wide" onclick="checkDevice()">بررسی مجدد</button><button class="btn secondary wide" onclick="logoutWeb()">خروج</button><p id="deviceStatus" class="hint"></p></div></main>';
 if(page==='login')h=topBar('ورود کاربران')+'<main class="wrap"><div class="card"><h2>ورود با پیامک</h2><p class="hint">نام و شماره موبایل تعریف‌شده توسط مدیر در برنامه اندروید را وارد کنید. درخواست واقعی به Supabase فرستاده می‌شود. پس از تأیید کد، وضعیت تأیید و فعال بودن دستگاه بررسی می‌شود.</p><label for="loginName">نام و نام خانوادگی</label><input id="loginName" autocomplete="name" placeholder="نام ثبت‌شده نزد مدیر" value="'+esc(pendingName)+'"><label for="loginMobile">شماره موبایل</label><input id="loginMobile" type="tel" inputmode="tel" autocomplete="tel" placeholder="09xxxxxxxxx" value="'+esc(pendingMobile)+'"><button id="requestBtn" class="btn wide" onclick="requestOtp()">دریافت کد تأیید</button><div id="otpPreview" class="hint" role="status" aria-live="polite"></div></div></main>';
@@ -40,7 +41,7 @@ if(page==='stats')h=topBar('آمار گزارش‌ها')+'<main class="wrap"><di
 if(page==='settings'||page==='notices'||page==='swaps'){let names={settings:'تنظیمات',notices:'اطلاعیه‌ها',swaps:'جانشینی و تعویض شیفت'};h=topBar(names[page])+'<main class="wrap">'+warning+'<div class="card"><h2>'+names[page]+'</h2><p>این بخش در نسخه‌های بعدی تکمیل می‌شود.</p></div>'+(page==='settings'?'<button class="btn secondary wide" onclick="go(&quot;operators&quot;)">⚙ مدیریت نام اپراتورها</button><button class="btn wide" onclick="clearDraft()">پاک‌کردن پیش‌نویس</button>':'')+'</main>'}
 
 el('view').innerHTML=h}
-window.go=safe(p=>{if(access&&['home','form','reports','stats','settings','notices','swaps'].includes(p))checkDevice().catch(()=>{});if(!access&&!['login','otp','pending','inactive'].includes(p))return;if(p==='form'&&access&&access.role!=='owner'&&access.user_type!=='shift')return;if(page==='form'&&p!=='form')stash();page=p;render();if(p==='reports'){updateReportTabs();refreshReports()}else if(p==='stats')refreshReports();window.scrollTo(0,0)});
+window.go=safe(p=>{if(access&&['home','form','reports','stats','settings','notices','swaps'].includes(p))checkDevice().catch(()=>{});if(!access&&!['login','otp','pending','inactive'].includes(p))return;if(p==='form'&&access&&access.role!=='owner'&&access.user_type!=='shift')return;if(page==='form'&&p!=='form'){if(editingReportId){editingReportId=null;editingOriginal=null;draft={};}else stash();}page=p;render();if(p==='reports'){updateReportTabs();refreshReports()}else if(p==='stats')refreshReports();window.scrollTo(0,0)});
 window.setPhase=safe(p=>{if(!access)return;phase=p;marks.forEach(m=>m.coupe=validCoupe(m.coupe));render()});window.setShift=safe(s=>{if(access&&access.role!=='owner'&&access.shift!==s)return;shift=s;render()});
 window.updateMark=(i,k,v)=>{if(marks[i])marks[i][k]=v};window.updateCut=(i,k,v)=>{if(cuts[i])cuts[i][k]=v};
 window.addMark=safe(()=>{marks.push({type:'لیبل',count:'',coupe:phase==='1'?'C1':'D1'});el('marks').innerHTML=marks.map(markRow).join('')});
@@ -72,6 +73,28 @@ window.logoutWeb=()=>{forgetVerifiedDevice();access=null;pendingName='';pendingM
 
 function num(x){const n=Number(digits(x));return Number.isSafeInteger(n)&&n>=0?n:0}
 function newReportId(){return crypto.randomUUID?crypto.randomUUID(): 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.floor(Math.random()*16);return (c==='x'?r:(r&3|8)).toString(16)})}
+function cycleStatusForReport(r){
+ const c=['صبح‌کار اول','صبح‌کار دوم','عصرکار اول','عصرکار دوم','شب‌کار اول','شب‌کار دوم','آف اول','آف دوم'];
+ const base={A:4,B:6,C:0,D:2}; if(!(r.shift in base))return 'نامشخص';
+ // Android V54 anchor: 2026-09-20, using Tehran calendar day.
+ let day='';if(r.tehran_time){const d=new Date(r.tehran_time);if(!isNaN(d))day=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tehran',year:'numeric',month:'2-digit',day:'2-digit'}).format(d)}
+ if(!day){const d=new Date();day=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tehran',year:'numeric',month:'2-digit',day:'2-digit'}).format(d)}
+ const m=day.match(/(\d{4})-(\d{2})-(\d{2})/);if(!m)return 'نامشخص';
+ const diff=Math.round((Date.UTC(+m[1],+m[2]-1,+m[3])-Date.UTC(2026,8,20))/86400000);
+ return c[((base[r.shift]+diff)%8+8)%8];
+}
+window.editWebReport=async id=>{
+ const r=reports.find(x=>String(x.id)===String(id));if(!r||!access)return;
+ if(String(r.owner_device_id||'')!==browserDeviceId())return alert('فقط گزارش ثبت‌شده با همین دستگاه قابل ویرایش است.');
+ try{const d=await readDevice();if(!d||!d.active||d.approval_status!=='approved')throw Error('دستگاه تأییدشده نیست');}
+ catch(e){return alert('ویرایش مجاز نیست: '+e.message)}
+ editingReportId=String(r.id);editingOriginal=structuredClone(r);phase=String(r.phase);shift=String(r.shift);
+ draft={produced:String(r.produced_melts??0),loaded:String(r.loaded_trucks??0),rolling:String(r.rolling_count??0),hot:!!r.hot_charge,box:!!r.box_unloading,operator:r.cut_operator||operators[0],notes:r.notes||''};
+ marks=Array.isArray(r.marks)&&r.marks.length?r.marks.map(m=>({...m})): [{type:'لیبل',count:'',coupe:phase==='1'?'C1':'D1'}];
+ cuts=Array.isArray(r.cuts)&&r.cuts.length?r.cuts.map(c=>({...c})): [{type:'شمش',count:'',melt:''}];
+ if(!operators.includes(draft.operator))operators.push(draft.operator);
+ page='form';render();window.scrollTo(0,0);
+};
 function nowTehranIso(){return new Date().toISOString()}
 function nowJalali(){const d=new Date();const date=new Intl.DateTimeFormat('fa-IR-u-ca-persian-nu-latn',{timeZone:'Asia/Tehran',year:'numeric',month:'2-digit',day:'2-digit'}).format(d);const time=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Tehran',hour:'2-digit',minute:'2-digit',hour12:false}).format(d);return digits(date)+' — '+time}
 async function api(path,opts={}){const r=await fetch(SB_URL+'/rest/v1/'+path,{...opts,headers:{'apikey':SB_KEY,'x-device-id':browserDeviceId(),...(opts.body?{'Content-Type':'application/json'}:{}),...(opts.headers||{})},cache:'no-store'});let raw=await r.text();let data;try{data=raw?JSON.parse(raw):null}catch{data=raw}if(!r.ok)throw Error((data&&(data.message||data.error))||'خطای سرور '+r.status);return data}
@@ -91,14 +114,14 @@ function reportCards(){
   const canDelete=!!access&&(access.role==='owner'||access.role==='admin');
   const phase1=String(r.phase)==='1';
   return '<article class="card report-detail"><h3 class="report-heading">فاز '+esc(r.phase)+' • شیفت '+esc(r.shift)+' • تاریخ '+esc(date)+(time?' • ساعت '+esc(time):'')+'</h3>'+
-   (r.cycle_status?'<p>چرخه کاری: '+esc(r.cycle_status)+'</p>':'')+
+   '<p><strong>چرخه کاری: '+esc(r.cycle_status||cycleStatusForReport(r))+'</strong></p>'+
    '<p><strong>'+label+': '+reporter+'</strong>'+(r.is_delegate?' • جانشین شیفت '+esc(r.shift):'')+'</p>'+
    '<p>تولید: '+num(r.produced_melts)+' ذوب | بارگیری: '+num(r.loaded_trucks)+' دستگاه</p>'+
    '<p>ارسال به نورد: '+num(r.rolling_count)+' ذوب</p>'+
    (phase1?'<p>هات شارژ: '+(r.hot_charge?'✓ انجام شد':'✗ انجام نشد')+' | تخلیه باکس: '+(r.box_unloading?'✓ انجام شد':'✗ انجام نشد')+'</p>':'')+
    marksHtml+'<p>اپراتور برشکاری: '+esc(r.cut_operator||'—')+'</p>'+cutsHtml+
    (r.notes?'<p>توضیحات: '+esc(r.notes)+'</p>':'')+
-   (isMine?'<p class="hint">این گزارش متعلق به دستگاه شماست؛ ویرایش در نسخه بعدی با تأیید سرور تکمیل می‌شود.</p>':'')+
+   (isMine?'<button class="btn wide" onclick="editWebReport(\''+esc(r.id||'')+'\')">✎ ویرایش گزارش خودم</button>':'')+
    (canDelete?'<button class="btn danger report-delete" onclick="deleteWebReport(\''+esc(r.id||'')+'\')">حذف گزارش</button>':'')+
    '</article>';
  }).join('');
@@ -125,23 +148,29 @@ let submittingReport=false;
 window.submitReport=async()=>{
  if(submittingReport||!access||!(access.role==='owner'||access.user_type==='shift'))return;
  stash();
- if(!confirm('گزارش به سرور مشترک ارسال شود؟'))return;
+ if(!confirm(editingReportId?'تغییرات این گزارش در سرور ذخیره شود؟':'گزارش به سرور مشترک ارسال شود؟'))return;
  submittingReport=true;
  const submitButton=document.querySelector('button[onclick="submitReport()"]');
  if(submitButton){submitButton.disabled=true;submitButton.textContent='در حال ثبت گزارش...'}
  const status=el('submitStatus');if(status)status.textContent='در حال ارسال گزارش به سرور...';
- const payload={id:newReportId(),phase,shift,tehran_time:nowTehranIso(),jalali:nowJalali(),produced_melts:num(draft.produced),loaded_trucks:num(draft.loaded),rolling_count:num(draft.rolling),hot_charge:phase==='1'&&!!draft.hot,box_unloading:phase==='1'&&!!draft.box,reporter_name:access.full_name||pendingName,marks:marks.filter(m=>num(m.count)>0).map(m=>({type:m.type,count:num(m.count),coupe:validCoupe(m.coupe)})),cut_operator:draft.operator||operators[0],cuts:cuts.filter(c=>num(c.count)>0||String(c.melt||'').trim()).map(c=>({type:c.type,count:num(c.count),melt:String(c.melt||'').trim()})),notes:draft.notes||'',owner_device_id:browserDeviceId(),owner_shift:shift,is_delegate:false,cycle_status:''};
+ const payload={id:editingReportId||newReportId(),phase,shift,tehran_time:editingOriginal?.tehran_time||nowTehranIso(),jalali:editingOriginal?.jalali||nowJalali(),produced_melts:num(draft.produced),loaded_trucks:num(draft.loaded),rolling_count:num(draft.rolling),hot_charge:phase==='1'&&!!draft.hot,box_unloading:phase==='1'&&!!draft.box,reporter_name:editingOriginal?.reporter_name||access.full_name||pendingName,marks:marks.filter(m=>num(m.count)>0).map(m=>({type:m.type,count:num(m.count),coupe:validCoupe(m.coupe)})),cut_operator:draft.operator||operators[0],cuts:cuts.filter(c=>num(c.count)>0||String(c.melt||'').trim()).map(c=>({type:c.type,count:num(c.count),melt:String(c.melt||'').trim()})),notes:draft.notes||'',owner_device_id:editingOriginal?.owner_device_id||browserDeviceId(),owner_shift:editingOriginal?.owner_shift||shift,is_delegate:editingOriginal?.is_delegate||false,cycle_status:editingOriginal?.cycle_status||cycleStatusForReport({shift,tehran_time:nowTehranIso()})};
  try{
    // Check current device approval without rerendering the form or losing its values.
    const device=await readDevice();
    if(!device||device.approval_status!=='approved'||!device.active)throw Error('دستگاه در سرور تأیید یا فعال نیست');
-   await api('shift_reports',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
+   if(editingReportId){
+     // Only patch editable columns, preserving report identity, ownership and timestamps.
+     const {produced_melts,loaded_trucks,rolling_count,hot_charge,box_unloading,marks,cut_operator,cuts,notes}=payload;
+     const changed={produced_melts,loaded_trucks,rolling_count,hot_charge,box_unloading,marks,cut_operator,cuts,notes};
+     const updated=await api('shift_reports?id=eq.'+encodeURIComponent(editingReportId)+'&owner_device_id=eq.'+encodeURIComponent(browserDeviceId()),{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify(changed)});
+     if(!Array.isArray(updated)||!updated.some(r=>String(r.id)===editingReportId))throw Error('سرور ویرایش را تأیید نکرد؛ دسترسی ویرایش را بررسی کنید.');
+   }else await api('shift_reports',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(payload)});
    // POST succeeded. Fetch again, without a manual refresh button.
-   reportsError='';reports=[payload,...reports.filter(r=>r.id!==payload.id)].slice(0,200);
+   reportsError='';reports=[{...(editingOriginal||{}),...payload},...reports.filter(r=>r.id!==payload.id)].slice(0,200);
    let syncError='';
    try{const fresh=await api('shift_reports?select=*&order=created_at.desc&limit=200');if(!Array.isArray(fresh))throw Error('پاسخ نامعتبر');reports=fresh;if(!fresh.some(r=>r.id===payload.id))syncError='گزارش ثبت شد، ولی در فهرست دریافتی دیده نشد؛ مجوز خواندن سرور را بررسی کنید.'}
    catch(e){syncError='گزارش ثبت شد ولی همگام‌سازی فهرست ناموفق بود: '+e.message}
-   localStorage.removeItem('shiftreport_v61_draft');draft={};marks=[{type:'لیبل',count:'',coupe:'C1'}];cuts=[{type:'شمش',count:'',melt:''}];
+   editingReportId=null;editingOriginal=null;localStorage.removeItem('shiftreport_v61_draft');draft={};marks=[{type:'لیبل',count:'',coupe:'C1'}];cuts=[{type:'شمش',count:'',melt:''}];
    reportFilter=String(phase);page='reports';render();updateReportTabs();
    if(syncError){reportsError='';const x=el('reportList');if(x)x.insertAdjacentHTML('afterbegin','<p class="alert">'+esc(syncError)+'</p>')}
    else{const x=el('reportList');if(x)x.insertAdjacentHTML('afterbegin','<p class="hint">گزارش با موفقیت ثبت و فهرست خودکار به‌روز شد ✓</p>')}

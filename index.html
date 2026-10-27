@@ -1,4 +1,4 @@
-<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>گزارش کار انبار شمش V8.9</title><style>
+<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>گزارش کار انبار شمش V9.0</title><style>
 *{box-sizing:border-box}body{margin:0;background:#f3f6fb;color:#182c47;font-family:Tahoma,Arial,sans-serif;padding-bottom:95px}button,input,textarea,select{font:inherit}button{border:0;cursor:pointer}header{background:linear-gradient(110deg,#27313a,#f16d00);color:#fff;padding:38px 16px 27px;border-radius:0 0 25px 25px;text-align:center}h1{font-size:25px}.wrap{padding:16px;max-width:780px;margin:auto}.alert{background:#fff3df;color:#79501c;border:1px solid #f2d9a9;padding:14px;border-radius:15px;line-height:2;margin:12px 0}.card{background:white;border-radius:18px;padding:17px;margin:15px 0;box-shadow:0 4px 17px #2034510d}.section{padding:16px;border-radius:20px;margin:15px 0}.bluebg{background:#eaf2ff}.peach{background:#fff4e8}.greenbg{background:#e9f8ec}.pink{background:#ffeef1}.violet{background:#f2edff}h2{font-size:20px}h3{font-size:17px}label{display:block;margin:12px 0 6px;font-weight:bold}input,select,textarea{width:100%;padding:12px;border:1px solid #c9d4e2;border-radius:12px;background:#fff;color:#17283d;min-width:0}textarea{min-height:105px}.row{display:flex;gap:8px}.row>*{flex:1;min-width:0}.btn{padding:13px;border-radius:12px;background:#166ad2;color:#fff;font-weight:bold}.btn.green{background:#1d9a5a}.btn.red{background:#c93039;padding:9px}.btn.wide{width:100%;margin:10px 0}.shiftgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.shift{padding:19px 0;border-radius:12px;color:#fff;font-weight:bold}.selected{outline:3px solid #253a59;outline-offset:2px}.phase{background:#e9e9ef;color:#303c4c}.phase.active{background:#7043b6;color:#fff}.action{display:block;width:100%;padding:20px 15px;text-align:right;color:white;font-size:18px;font-weight:bold;border-radius:17px;margin:12px 0;background:#1966c9}.orange{background:#ee7a16}.purple{background:#7041bb}.small{font-size:12px;color:#61728a;line-height:2}.muted{color:#65768c}.minirow{display:grid;grid-template-columns:1.05fr .8fr 1fr 40px;gap:4px;margin:8px 0}.minirow input,.minirow select{padding:8px 4px;font-size:13px}.minirow select{font-size:12px}.minirow{grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr) minmax(0,1fr) 40px}.manage{margin-top:12px}.manage textarea{min-height:150px}.hint{font-size:12px;color:#586a82;line-height:1.8}.check{display:flex;align-items:center;gap:9px}.check input{width:22px;height:22px}.nav{position:fixed;bottom:0;left:0;right:0;background:#fff;display:flex;box-shadow:0 -4px 18px #142a4017;padding:10px 4px 14px;z-index:4}.nav button{flex:1;background:transparent;color:#647287;padding:7px 2px;font-size:13px}.nav button.active{color:#1464be;font-weight:bold;background:#edf5ff;border-radius:12px}.nav span{display:block;font-size:22px;margin-bottom:4px}.top{background:#185eb3;color:#fff;padding:16px;font-size:20px;display:flex;gap:12px;align-items:center}.top button{background:#2875d0;color:#fff;padding:8px 13px;border-radius:10px}.error{margin:12px;padding:12px;border:2px solid #e44;background:#fff;color:#a11;white-space:pre-wrap;direction:ltr;text-align:left}
 .report-tabs{margin:14px 0;gap:8px}.report-tabs .btn{flex:1;background:#586a7e;color:white;padding:12px 4px;font-size:14px}.report-tabs .btn.active{background:#7040b8}.report-detail{margin:12px 0;text-align:right;line-height:2}.report-detail p{margin:9px 0}.report-heading{color:#1766bd;font-size:17px;line-height:1.9}.report-delete{background:#c93030!important;color:white;width:100%;margin-top:12px}.report-detail strong{font-weight:700}.recent-list{display:grid;gap:14px;margin-top:16px}.recent-item{display:flex;align-items:center;gap:10px;justify-content:flex-start;font-size:16px;font-weight:bold;line-height:1.8}.recent-dot{width:11px;height:11px;border-radius:50%;flex:none}.recent-date{font-variant-numeric:tabular-nums}.recent-msg{font-size:14px;color:#65768c;line-height:1.9}.recent-button{display:flex;width:100%;border:0;background:transparent;text-align:right;padding:9px 3px;border-radius:10px;align-items:center;gap:10px;cursor:pointer}.recent-button:focus-visible{outline:2px solid #1768cf}.recent-button:active{background:#eef4fc}.recent-chevron{margin-right:auto;color:#8290a3;font-size:19px}
 .stats-card h2,.stats-result h2{font-size:23px;margin:0 0 16px}.stats-card{margin-bottom:16px}.stats-card>p{line-height:1.8}.stats-card select,.stats-card input{display:block;width:100%;min-height:52px;border:1px solid #ccd5de;border-radius:12px;background:#fff;padding:10px 14px;margin:7px 0 16px;color:#182c47}.stats-label{display:block;font-weight:bold;margin-top:12px}.stats-result{background:#eaf4ff}.stats-result>p{line-height:1.8}.stats-subtitle{font-size:14px;color:#42617c}.stats-lines>div{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #d7e5f2;padding:12px 0}.stats-lines strong{white-space:nowrap}.stats-date-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stats-date-row>div{min-width:0}.stats-date-btn{width:100%;min-height:53px;border-radius:13px;background:#f5f6fb;color:#192d48;border:1px solid #dce1e9;font-weight:bold}.stats-date-row .stats-label{margin-bottom:7px}.stats-modal-backdrop{position:fixed;inset:0;background:#0009;display:flex;align-items:center;justify-content:center;padding:16px;z-index:100}.stats-modal{background:white;border-radius:16px;width:min(100%,430px);padding:20px;box-shadow:0 12px 40px #0003}.stats-modal h3{margin:0 0 14px}.stats-modal-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}.stats-modal-grid select{min-width:0;width:100%;padding:10px 5px}.stats-modal-actions{display:flex;justify-content:flex-start;gap:8px;margin-top:20px}.stats-modal-actions button{background:transparent;color:#1766bd;padding:10px 15px}.stats-modal-actions button:first-child{font-weight:bold}
@@ -13,6 +13,12 @@
 .operator-item span{flex:1;text-align:right;overflow-wrap:anywhere}
 .operator-delete{background:#c93030;color:white;min-width:76px;min-height:44px;padding:8px 14px;border-radius:14px}
 #operatorAddPanel input{width:100%;min-height:50px;border:1px solid #cbd5e1;border-radius:12px;padding:10px;margin:8px 0}
+.shift-change-card{padding:13px 15px;margin:10px 0;border:1px solid #e5eaf0}
+.shift-change-head,.shift-change-line{display:flex;justify-content:space-between;align-items:center;gap:8px;line-height:2}
+.shift-change-head{border-bottom:1px solid #edf0f4;padding-bottom:6px;margin-bottom:5px}
+.shift-change-line{font-size:13px;flex-wrap:wrap}.shift-change-line strong{font-weight:600}
+.shift-change-actions{display:flex;gap:8px;margin-top:10px}.shift-change-actions button{flex:1}
+.shift-picker-item{display:block;width:100%;text-align:right;padding:13px;margin:7px 0;border:1px solid #e0e5ed;border-radius:12px;background:#f8fafd;color:#17283d}
 </style></head><body>
 <div id="view"><main class="wrap" style="min-height:75vh;display:flex;align-items:center;justify-content:center"><div class="card" role="status" aria-live="polite" style="text-align:center;width:100%;max-width:420px"><h2>گزارش کار انبار شمش</h2><p class="muted">در حال بررسی ورود...</p></div></main></div>
 <div id="buildVersion" style="position:fixed;left:8px;bottom:76px;font:11px sans-serif;color:#64748b;z-index:3;pointer-events:none;background:rgba(255,255,255,.8);border-radius:5px;padding:2px 5px">V8.9</div>
@@ -46,7 +52,7 @@ function staffRole(){if(!access)return '';const t=String(access.user_type||'').t
 function mayRegisterReport(){if(!access)return false;const t=String(access.user_type||'').toLowerCase();return t==='shift'&&!['supervisor','chief','expert'].includes(t)}
 function isTechnician(){if(!access)return false;const r=String(access.role||'').toLowerCase(),t=String(access.user_type||'').toLowerCase();return r!=='owner'&&['shift','day_technician','technician','operator'].includes(t)}
 function render(){if(page==='boot'){document.querySelector('.nav').style.display='none';el('view').innerHTML='<main class="wrap" style="min-height:75vh;display:flex;align-items:center;justify-content:center"><div class="card" role="status" aria-live="polite" style="text-align:center;width:100%;max-width:420px"><h2>گزارش کار انبار شمش</h2><p class="muted">در حال بررسی ورود...</p></div></main>';return}if(!access&&!['login','otp','pending','inactive'].includes(page))page='login';if(page==='stats'&&isTechnician())page='home';document.querySelector('.nav').style.display=access?'flex':'none';const statsTab=document.querySelector('.nav button[data-page="stats"]');if(statsTab)statsTab.style.display=isTechnician()?'none':'';document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));let h='';
-if(page==='home')h='<header><h1>گزارش کار انبار شمش</h1><p>مجتمع فولاد خراسان</p></header><main class="wrap"><div class="card" style="padding:12px 16px;text-align:right"><span style="font-size:14px;font-weight:600">'+esc(access?.full_name||'')+' • '+esc(staffRole())+'</span></div>'+(mayRegisterReport()?'<div class="card"><h2>انتخاب شیفت</h2><div class="shiftgrid">'+[['A','#1f9b61'],['B','#1768cf'],['C','#f07815'],['D','#6b3db8']].map(x=>'<button class="shift '+(shift===x[0]?'selected':'')+'" style="background:'+x[1]+'" onclick="setShift(&quot;'+x[0]+'&quot;)">شیفت '+x[0]+'</button>').join('')+'</div></div><div class="card"><h2>انتخاب فاز گزارش</h2><div class="row"><button class="btn phase '+(phase==='1'?'active':'')+'" onclick="setPhase(&quot;1&quot;)">فاز ۱</button><button class="btn phase '+(phase==='2'?'active':'')+'" onclick="setPhase(&quot;2&quot;)">فاز ۲</button></div></div><button class="action" onclick="go(&quot;form&quot;)">＋ ثبت گزارش فاز '+phase+' • شیفت '+shift+'</button>':'')+'<button class="action orange" onclick="go(&quot;notices&quot;)">📢 اطلاعیه‌ها</button>'+(mayRegisterReport()?'<button class="action purple" onclick="go(&quot;swaps&quot;)">⇄ جانشینی و تعویض شیفت</button>':'')+'<div class="card"><h2>آخرین گزارش‌ها</h2><div id="recentReports">'+recentReportsHtml()+'</div></div></main>';
+if(page==='home')h='<header><h1>گزارش کار انبار شمش</h1><p>مجتمع فولاد خراسان</p></header><main class="wrap"><div class="card" style="padding:12px 16px;text-align:right"><span style="font-size:14px;font-weight:600">'+esc(access?.full_name||'')+' • '+esc(staffRole())+'</span></div>'+(mayRegisterReport()?'<div class="card"><h2>انتخاب شیفت</h2><div class="shiftgrid">'+[['A','#1f9b61'],['B','#1768cf'],['C','#f07815'],['D','#6b3db8']].map(x=>'<button class="shift '+(shift===x[0]?'selected':'')+'" style="background:'+x[1]+'" onclick="setShift(&quot;'+x[0]+'&quot;)">شیفت '+x[0]+'</button>').join('')+'</div></div><div class="card"><h2>انتخاب فاز گزارش</h2><div class="row"><button class="btn phase '+(phase==='1'?'active':'')+'" onclick="setPhase(&quot;1&quot;)">فاز ۱</button><button class="btn phase '+(phase==='2'?'active':'')+'" onclick="setPhase(&quot;2&quot;)">فاز ۲</button></div></div><button class="action" onclick="go(&quot;form&quot;)">＋ ثبت گزارش فاز '+phase+' • شیفت '+shift+'</button>':'')+'<button class="action orange" onclick="go(&quot;notices&quot;)">📢 اطلاعیه‌ها</button>'+'<button class="action purple" onclick="go(&quot;swaps&quot;)">⇄ جانشینی و تعویض شیفت</button>'+'<div class="card"><h2>آخرین گزارش‌ها</h2><div id="recentReports">'+recentReportsHtml()+'</div></div></main>';
 if(page==='form')h=topBar((editingReportId?'ویرایش گزارش':'ثبت گزارش')+' فاز '+phase+' • شیفت '+shift)+'<main class="wrap">'+warning+'<section class="section bluebg"><h3>⚗ تولید و بارگیری</h3>'+field('produced','تعداد ذوب تولیدشده')+field('loaded','بارگیری ماشین')+'</section><section class="section peach"><h3>▰ ارسال به نورد</h3>'+field('rolling','تعداد ذوب ارسالی')+'</section>'+(phase==='1'?'<section class="section peach"><h3>🔥 عملیات فاز ۱</h3><label class="check"><input id="hot" type="checkbox" '+(draft.hot?'checked':'')+'>هات شارژ انجام شد</label><label class="check"><input id="box" type="checkbox" '+(draft.box?'checked':'')+'>تخلیه باکس انجام شد</label></section>':'')+'<section class="section greenbg"><h3>◆ مارک‌گذاری (لیبل / شابلون)</h3><button class="btn" onclick="addMark()">＋ افزودن مورد</button><div class="small">نوع | تعداد ذوب | کوپه</div><div id="marks">'+marks.map(markRow).join('')+'</div></section><section class="section pink"><h3>✂ برشکاری</h3>'+operatorSelect()+'<div class="small">نوع برش | تعداد | شماره ذوب</div><div id="cuts">'+cuts.map(cutRow).join('')+'</div><button class="btn" style="margin-top:14px" onclick="addCut()">＋ افزودن برش</button></section><section class="section violet"><h3>🔧 اتفاقات / خرابی‌ها / تعمیرات و توضیحات شیفت</h3><textarea id="notes" placeholder="توضیحات شیفت...">'+esc(draft.notes||'')+'</textarea></section><button class="btn green wide" onclick="submitReport()">'+(editingReportId?'ذخیره تغییرات گزارش':'ثبت و ارسال گزارش به سرور')+'</button><button class="btn wide" onclick="saveDraft()">ذخیره پیش‌نویس روی گوشی</button><p id="submitStatus" class="hint" role="status"></p></main>';
 if(page==='pending')h=topBar('در انتظار تأیید مدیر')+'<main class="wrap"><div class="card"><h2>در انتظار تأیید مدیر</h2><p>کد پیامکی تأیید شد، اما این دستگاه هنوز توسط مالک یا مدیر تأیید و فعال نشده است.</p><button class="btn wide" onclick="checkDevice()">بررسی مجدد وضعیت</button><button class="btn secondary wide" onclick="logoutWeb()">خروج</button><p id="deviceStatus" class="hint"></p></div></main>';
 if(page==='inactive')h=topBar('دستگاه غیرفعال')+'<main class="wrap"><div class="card"><h2>دسترسی غیرفعال است</h2><p>این دستگاه توسط مدیر غیرفعال یا رد شده است.</p><button class="btn wide" onclick="checkDevice()">بررسی مجدد</button><button class="btn secondary wide" onclick="logoutWeb()">خروج</button><p id="deviceStatus" class="hint"></p></div></main>';
@@ -57,19 +63,141 @@ if(page==='operators')h=topBar('مدیریت اپراتورها')+'<main class="
 if(page==='reportDetail')h=topBar('جزئیات گزارش')+'<main class="wrap"><div id="singleReport">'+reportCards(selectedReportId)+'</div></main>';
 if(page==='reports')h=topBar('گزارش‌ها')+'<main class="wrap"><div class="row report-tabs"><button id="filter1" class="btn" onclick="setReportFilter(\'1\')">گزارش‌های فاز ۱</button><button id="filter2" class="btn" onclick="setReportFilter(\'2\')">گزارش‌های فاز ۲</button></div><div id="reportList">'+reportCards()+'</div></div></main>';
 if(page==='stats')h=topBar('آمار')+'<main class="wrap"><div id="statsContent">'+statsHtml()+'</div></main>';
-if(page==='swaps'){let names={settings:'تنظیمات',notices:'اطلاعیه‌ها',swaps:'جانشینی و تعویض شیفت'};h=topBar(names[page])+'<main class="wrap">'+warning+'<div class="card"><h2>'+names[page]+'</h2><p>این بخش در نسخه‌های بعدی تکمیل می‌شود.</p></div>'+(page==='settings'?'<button class="btn secondary wide" onclick="go(&quot;operators&quot;)">⚙ مدیریت نام اپراتورها</button><button class="btn wide" onclick="clearDraft()">پاک‌کردن پیش‌نویس</button>':'')+'</main>'}
+if(page==='swaps')h=topBar('جانشینی و تعویض شیفت')+'<main class="wrap">'+(mayRegisterReport()?'<div class="row"><button class="btn orange" onclick="startShiftChange(\'cover_partner\')">جانشین</button><button class="btn" onclick="startShiftChange(\'swap\')">تعویض</button></div>':'')+'<div class="card"><h2>'+(isTechnician()?'درخواست‌های من':'درخواست‌های جانشینی و تعویض')+'</h2><div id="shiftChangeList">در حال دریافت درخواست‌ها...</div></div></main>';
 
 if(page==='settings')h=topBar('تنظیمات و اتصال')+'<main class="wrap"><div class="card"><h2>مشخصات این دستگاه</h2><p>پرسنل: '+esc(access?.full_name||'')+'</p><p>سطح دسترسی: '+esc(staffRole())+'</p><p>شیفت این دستگاه: '+esc(access?.shift||'بدون شیفت')+'</p><p>وضعیت: تأییدشده و فعال</p></div>'+((access?.role==='admin'||access?.role==='owner')?'<button class="btn wide" onclick="go(\'devices\')">⚙ پنل مدیریت دستگاه‌ها</button>':'')+'<button class="btn green wide" onclick="go(\'operators\')">✂ مدیریت اپراتورهای برشکاری</button></main>';
 if(page==='devices')h=topBar('پنل مدیریت دستگاه‌ها')+'<main class="wrap"><div id="deviceList" class="card">در حال دریافت دستگاه‌ها...</div></main>';
 if(page==='notices')h=topBar('اطلاعیه‌ها')+'<main class="wrap"><div id="noticeList"></div></main>';
 el('view').innerHTML=h}
+
+// Shift change V9.0: all mutations are authorized by Supabase RPCs.
+let shiftChangeRows=[],shiftChangePartner=null,shiftChangeMode='',shiftChangeDate='',shiftChangeEditId=null;
+const shiftCycleNames=['صبح‌کار اول','صبح‌کار دوم','عصرکار اول','عصرکار دوم','شب‌کار اول','شب‌کار دوم','آف اول','آف دوم'];
+function shiftChangeOwner(){return !!access&&access.role==='owner'}
+function shiftCycleOnDate(iso,sh){
+ const offset={A:4,B:6,C:0,D:2}[sh];if(offset===undefined)return '';
+ const m=String(iso||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!m)return '';
+ const days=Math.round((Date.UTC(+m[1],+m[2]-1,+m[3])-Date.UTC(2026,8,20))/86400000);
+ return shiftCycleNames[((days+offset)%8+8)%8];
+}
+function gregorianToJalali(iso){
+ const m=String(iso||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);if(!m)return iso||'';
+ const d=new Date(Date.UTC(+m[1],+m[2]-1,+m[3],12));
+ const parts=new Intl.DateTimeFormat('en-US-u-ca-persian-nu-latn',{timeZone:'UTC',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d);
+ const v=k=>parts.find(p=>p.type===k)?.value||'';
+ return v('year')+'/'+v('month')+'/'+v('day');
+}
+function jalaliToGregorian(j){
+ if(!validJalDate(j))return '';
+ const y=+j.slice(0,4),start=Date.UTC(y+620,0,1,12);
+ for(let i=0;i<735;i++){
+  const d=new Date(start+i*86400000);
+  const iso=d.toISOString().slice(0,10);
+  if(gregorianToJalali(iso)===j)return iso;
+ }
+ return '';
+}
+function shiftChangeCards(){
+ if(!shiftChangeRows.length)return '<p class="muted">درخواستی ثبت نشده است.</p>';
+ return shiftChangeRows.map(r=>{
+  const swap=r.mode==='swap',mine=browserDeviceId(),owner=shiftChangeOwner();
+  const participant=mine===r.first_device_id||mine===r.second_device_id;
+  const technicianView=participant&&!owner&&access?.user_type==='shift';
+  const colleague=mine===r.first_device_id?{name:r.second_name,shift:r.second_shift}:{name:r.first_name,shift:r.first_shift};
+  const title=swap?'تعویض':'جانشینی';
+  const header='<div class="shift-change-head"><strong>'+title+'</strong><span>'+esc(gregorianToJalali(r.work_date))+'</span></div>';
+  const details=technicianView?'<div class="shift-change-line"><span>همکار: <strong>'+esc(colleague.name||'بدون نام')+'</strong></span><span>شیفت '+esc(colleague.shift||'')+'</span></div>':
+   '<div class="shift-change-line"><span>'+(swap?'تکنسین اول: ':'مرخصی: ')+'<strong>'+esc(r.first_name||'بدون نام')+'</strong></span><span>شیفت '+esc(r.first_shift||'')+'</span></div>'+
+   '<div class="shift-change-line"><span>'+(swap?'تکنسین دوم: ':'جانشین: ')+'<strong>'+esc(r.second_name||'بدون نام')+'</strong></span><span>شیفت '+esc(r.second_shift||'')+'</span></div>'+
+   (swap?'':'<div class="shift-change-line"><span>نوبت جانشینی</span><strong>'+esc(shiftCycleOnDate(r.work_date,r.first_shift))+'</strong></div>');
+  const canEdit=!!r.editable&&(owner||participant&&access?.user_type==='shift');
+  const actions=canEdit?'<div class="shift-change-actions"><button class="btn" onclick="editShiftChange('+Number(r.id)+')">ویرایش</button><button class="btn red" onclick="deleteShiftChange('+Number(r.id)+')">حذف</button></div>':'';
+  return '<div class="card shift-change-card">'+header+details+actions+'</div>';
+ }).join('');
+}
+async function loadShiftChanges(){
+ if(!access||page!=='swaps')return;
+ const target=el('shiftChangeList');if(target)target.textContent='در حال دریافت درخواست‌ها...';
+ try{
+  const data=await otpRpc('v65_list_shift_changes',{});
+  if(!Array.isArray(data))throw Error('پاسخ نامعتبر');
+  shiftChangeRows=data;
+  if(page==='swaps'&&el('shiftChangeList'))el('shiftChangeList').innerHTML=shiftChangeCards();
+ }catch(e){if(page==='swaps'&&el('shiftChangeList'))el('shiftChangeList').textContent='خطا در دریافت درخواست‌ها: '+e.message}
+}
+window.loadShiftChanges=loadShiftChanges;
+function shiftDialog(title,content){
+ document.getElementById('shiftDialog')?.remove();
+ const overlay=document.createElement('div');overlay.className='stats-modal-backdrop';overlay.id='shiftDialog';overlay.dir='rtl';
+ overlay.innerHTML='<div class="stats-modal" style="max-height:85vh;overflow:auto"><h3>'+esc(title)+'</h3><div id="shiftDialogContent">'+content+'</div><button class="btn wide" onclick="closeShiftDialog()">انصراف</button></div>';
+ document.body.appendChild(overlay);
+}
+window.closeShiftDialog=()=>document.getElementById('shiftDialog')?.remove();
+window.startShiftChange=async mode=>{
+ if(!mayRegisterReport())return;
+ shiftChangeMode=mode;shiftDialog('انتخاب تکنسین همکار','در حال دریافت تکنسین‌ها...');
+ try{
+  const people=await api('shift_devices?active=eq.true&approval_status=eq.approved&user_type=eq.shift&shift=in.(A,B,C,D)&select=device_id,full_name,shift&order=full_name.asc');
+  const candidates=people.filter(p=>p.device_id!==browserDeviceId()&&p.shift!==access.shift);
+  const box=el('shiftDialogContent');if(!box)return;
+  box.innerHTML=candidates.length?candidates.map((p,i)=>'<button class="shift-picker-item" onclick="chooseShiftPartner('+i+')">'+esc(p.full_name||'بدون نام')+' • شیفت '+esc(p.shift)+'</button>').join(''):'تکنسین شیفتی دیگری پیدا نشد.';
+  shiftChangeCandidates=candidates;
+ }catch(e){const box=el('shiftDialogContent');if(box)box.textContent='خطا در دریافت تکنسین‌ها: '+e.message}
+};
+let shiftChangeCandidates=[];
+window.chooseShiftPartner=i=>{shiftChangePartner=shiftChangeCandidates[i];if(!shiftChangePartner)return;shiftChangeEditId=null;openShiftDatePicker(todayJalali())};
+function openShiftDatePicker(j){
+ shiftChangeDate=j;shiftDialog('تاریخ','<button class="stats-date-btn" onclick="chooseShiftDate()">'+esc(shiftChangeDate)+'</button><button class="btn green wide" id="shiftSave" onclick="saveShiftChange()">ثبت</button>');
+}
+window.chooseShiftDate=()=>{
+ const old=el('shiftDialog');if(!old)return;
+ const current=shiftChangeDate||todayJalali(),[yy,mm,dd]=current.split('/').map(Number);
+ const years=Array.from({length:16},(_,i)=>Number(todayJalali().slice(0,4))-2+i);
+ const select=(id,values,chosen)=>'<select id="'+id+'">'+values.map(([v,t])=>'<option value="'+v+'"'+(v===chosen?' selected':'')+'>'+esc(t)+'</option>').join('')+'</select>';
+ const months=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+ const content='<div class="stats-modal-grid">'+select('shiftYear',years.map(v=>[v,String(v)]),yy)+select('shiftMonth',months.map((v,i)=>[i+1,v]),mm)+select('shiftDay',Array.from({length:31},(_,i)=>[i+1,String(i+1)]),dd)+'</div><button class="btn green wide" onclick="applyShiftDate()">تأیید تاریخ</button>';
+ shiftDialog('انتخاب تاریخ شمسی',content);
+};
+window.applyShiftDate=()=>{
+ const y=+el('shiftYear')?.value,m=+el('shiftMonth')?.value,d=+el('shiftDay')?.value;
+ const j=[y,String(m).padStart(2,'0'),String(d).padStart(2,'0')].join('/');
+ if(!jalaliToGregorian(j))return alert('تاریخ انتخاب‌شده معتبر نیست.');
+ openShiftDatePicker(j);
+};
+window.editShiftChange=id=>{
+ const r=shiftChangeRows.find(x=>Number(x.id)===Number(id));
+ if(!r||!r.editable)return;
+ shiftChangeEditId=id;shiftChangePartner=null;openShiftDatePicker(gregorianToJalali(r.work_date));
+};
+window.saveShiftChange=async()=>{
+ const iso=jalaliToGregorian(shiftChangeDate);
+ if(!iso)return alert('تاریخ معتبر نیست.');
+ const b=el('shiftSave');if(b)b.disabled=true;
+ try{
+  if(shiftChangeEditId!==null){
+   await otpRpc('v65_update_shift_change_date',{p_id:shiftChangeEditId,p_work_date:iso});
+  }else{
+   if(!shiftChangePartner)return;
+   await otpRpc('v54_register_shift_change',{p_partner:shiftChangePartner.device_id,p_work_date:iso,p_mode:shiftChangeMode});
+  }
+  closeShiftDialog();await loadShiftChanges();
+ }catch(e){alert('ثبت انجام نشد: '+e.message)}
+ finally{if(b&&b.isConnected)b.disabled=false}
+};
+window.deleteShiftChange=async id=>{
+ const r=shiftChangeRows.find(x=>Number(x.id)===Number(id));
+ if(!r||!r.editable||!confirm('این درخواست حذف شود؟'))return;
+ try{await otpRpc('v65_delete_shift_change',{p_id:id});await loadShiftChanges()}
+ catch(e){alert('حذف انجام نشد: '+e.message)}
+};
+
 const NAV_PAGES=['home','form','reports','stats','settings','notices','swaps','devices','operators','reportDetail'];
 const ROUTE_KEY='shiftreport_v88_route';
 let routeStack=[];
 function readRoute(){try{const o=JSON.parse(sessionStorage.getItem(ROUTE_KEY)||'null');if(o&&Array.isArray(o.stack)){routeStack=o.stack.filter(p=>NAV_PAGES.includes(p)).slice(-30);return NAV_PAGES.includes(o.page)?o.page:'home'}}catch(e){}return 'home'}
 function saveRoute(){if(!access||!NAV_PAGES.includes(page))return;try{sessionStorage.setItem(ROUTE_KEY,JSON.stringify({page,stack:routeStack,selectedReportId:page==='reportDetail'?selectedReportId:null}))}catch(e){}}
 function restoreRoute(){const target=readRoute();if(target==='reportDetail'){try{selectedReportId=JSON.parse(sessionStorage.getItem(ROUTE_KEY)||'{}').selectedReportId}catch(e){}if(!selectedReportId)return 'reports'}return target==='stats'&&isTechnician()?'home':target==='form'&&!mayRegisterReport()?'home':target}
-function refreshRoutePage(p){if(p==='reports'){updateReportTabs();refreshReports()}else if(p==='home'){refreshReports();checkPendingNotices()}else if(p==='notices'){loadNotices()}else if(p==='devices'){loadDevices()}else if(p==='operators'||p==='form'){loadOperators()}}
+function refreshRoutePage(p){if(p==='reports'){updateReportTabs();refreshReports()}else if(p==='home'){refreshReports();checkPendingNotices()}else if(p==='notices'){loadNotices()}else if(p==='devices'){loadDevices()}else if(p==='operators'||p==='form'){loadOperators()}else if(p==='swaps'){loadShiftChanges()}}
 function setRoute(p,fromHistory=false){
  if(!access||!NAV_PAGES.includes(p)||p==='form'&&!mayRegisterReport()||p==='stats'&&isTechnician())return;
  if(page===p)return;

@@ -327,7 +327,7 @@ function cycleStatusForReport(r){
  let day='';if(r.tehran_time){const d=new Date(r.tehran_time);if(!isNaN(d))day=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tehran',year:'numeric',month:'2-digit',day:'2-digit'}).format(d)}
  if(!day){const d=new Date();day=new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Tehran',year:'numeric',month:'2-digit',day:'2-digit'}).format(d)}
  const m=day.match(/(\d{4})-(\d{2})-(\d{2})/);if(!m)return 'نامشخص';
- const diff=Math.round((Date.UTC(+m[1],+m[2]-1,+m[3])-Date.UTC(2026,8,20))/86400000);
+ let reportDay=Date.UTC(+m[1],+m[2]-1,+m[3]); const hh=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Tehran',hour:'2-digit',hour12:false}).format(new Date(r.tehran_time||Date.now()));if(+hh<8 && (r.shift==='A'||r.shift==='B'||r.shift==='C'||r.shift==='D')){const prev=reportDay-86400000;const pi=((Math.round((prev-Date.UTC(2026,8,20))/86400000)+base[r.shift])%8+8)%8;if(pi===4||pi===5)reportDay=prev;}const diff=Math.round((reportDay-Date.UTC(2026,8,20))/86400000);
  return c[((base[r.shift]+diff)%8+8)%8];
 }
 window.editWebReport=async id=>{
@@ -345,6 +345,7 @@ window.editWebReport=async id=>{
 function nowTehranIso(){return new Date().toISOString()}
 function nowJalali(){const d=new Date();const date=new Intl.DateTimeFormat('fa-IR-u-ca-persian-nu-latn',{timeZone:'Asia/Tehran',year:'numeric',month:'2-digit',day:'2-digit'}).format(d);const time=new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Tehran',hour:'2-digit',minute:'2-digit',hour12:false}).format(d);return digits(date)+' — '+time}
 async function api(path,opts={}){const r=await fetch(SB_URL+'/rest/v1/'+path,{...opts,headers:{'apikey':SB_KEY,'x-device-id':browserDeviceId(),...(opts.body?{'Content-Type':'application/json'}:{}),...(opts.headers||{})},cache:'no-store'});let raw=await r.text();let data;try{data=raw?JSON.parse(raw):null}catch{data=raw}if(!r.ok)throw Error((data&&(data.message||data.error))||'خطای سرور '+r.status);return data}
+function reportWorkJalali(r){return r.report_work_date?gregorianToJalali(r.report_work_date):String(r.jalali||'').split('—')[0].trim()}
 function reportCards(onlyId=null){
  if(loadingReports)return '<p>در حال دریافت گزارش‌ها...</p>';
  if(reportsError)return '<p class="alert">'+esc(reportsError)+'</p>';
@@ -352,17 +353,16 @@ function reportCards(onlyId=null){
  if(!rows.length)return '<p class="muted">'+(onlyId!==null?'گزارش انتخاب‌شده پیدا نشد یا دیگر در دسترس نیست.':'هنوز گزارشی برای این فاز ثبت نشده است.')+'</p>';
  return rows.map(r=>{
   const jal=String(r.jalali||''), parts=jal.split('—'),date=parts[0].trim(),time=(parts[1]||'').trim();
-  const role=r._reporter_role||'', type=r._reporter_user_type||'';
-  const label=role==='owner'?'سرور':type==='supervisor'?'سرپرست':type==='chief'?'رئیس':type==='expert'?'کارشناس':'تکنسین';
-  const reporter=esc(r.reporter_name||'نام ثبت‌کننده موجود نیست');
+  const reporter=esc(r.reporter_name||'نامشخص');
   const marksHtml=(Array.isArray(r.marks)?r.marks:[]).map(m=>'<p>'+esc(m.type||'مارک‌گذاری')+': '+num(m.count)+' ذوب • کوپه '+esc(m.coupe||'—')+'</p>').join('');
   const cutsHtml=(Array.isArray(r.cuts)?r.cuts:[]).map(c=>'<p>'+esc(c.type||'برش')+' • '+num(c.count)+' عدد • ذوب '+esc(c.melt||'—')+'</p>').join('');
   const isMine=!!access&&String(r.owner_device_id||'')===browserDeviceId();
   const canDelete=!!access&&(access.role==='owner'||access.role==='admin');
   const phase1=String(r.phase)==='1';
-  return '<article class="card report-detail"><h3 class="report-heading">فاز '+esc(r.phase)+' • شیفت '+esc(r.shift)+' • تاریخ '+esc(date)+(time?' • ساعت '+esc(time):'')+'</h3>'+
-   '<p><strong>چرخه کاری: '+esc(r.cycle_status||cycleStatusForReport(r))+'</strong></p>'+
-   '<p><strong>'+label+': '+reporter+'</strong>'+(r.is_delegate?' • جانشین شیفت '+esc(r.shift):'')+'</p>'+
+  return '<article class="card report-detail"><h3 class="report-heading">فاز '+esc(r.phase)+' • شیفت '+esc(r.shift)+' • تاریخ '+esc(reportWorkJalali(r))+'</h3>'+
+   (time?'<p>ساعت ثبت گزارش: '+esc(time)+' در تاریخ '+esc(date)+'</p>':'')+
+   '<p><strong>شرح کاری: '+esc(r.cycle_status||cycleStatusForReport(r))+'</strong></p>'+
+   '<p><strong>تکنسین: '+reporter+'</strong></p>'+
    '<p>تولید: '+num(r.produced_melts)+' ذوب | بارگیری: '+num(r.loaded_trucks)+' دستگاه</p>'+
    '<p>ارسال به نورد: '+num(r.rolling_count)+' ذوب</p>'+
    (phase1?'<p>هات شارژ: '+(r.hot_charge?'✓ انجام شد':'✗ انجام نشد')+' | تخلیه باکس: '+(r.box_unloading?'✓ انجام شد':'✗ انجام نشد')+'</p>':'')+
@@ -378,7 +378,7 @@ function recentReportsHtml(){
  const colors={A:'#1f9b61',B:'#1768cf',C:'#f07815',D:'#6b3db8'};
  return '<div class="recent-list">'+reports.slice().sort((a,b)=>String(b.created_at||b.tehran_time||'').localeCompare(String(a.created_at||a.tehran_time||''))).slice(0,4).map(r=>{
   const color=colors[r.shift]||'#586a7e';
-  const date=String(r.jalali||'').split('—')[0].trim()||'تاریخ نامشخص';
+  const date=reportWorkJalali(r)||'تاریخ نامشخص';
   return '<button type="button" class="recent-item recent-button" style="color:'+color+'" onclick="openRecentReport(\''+encodeURIComponent(String(r.id||''))+'\')" aria-label="مشاهده گزارش شیفت '+esc(r.shift||'')+' تاریخ '+esc(date)+'"><span class="recent-dot" style="background:'+color+'"></span><span>شیفت '+esc(r.shift||'—')+' • تاریخ <span class="recent-date">'+esc(date)+'</span></span><span class="recent-chevron">❮</span></button>';
  }).join('')+'</div>';
 }
@@ -467,7 +467,7 @@ window.submitReport=async()=>{
  const submitButton=document.querySelector('button[onclick="submitReport()"]');
  if(submitButton){submitButton.disabled=true;submitButton.textContent='در حال ثبت گزارش...'}
  const status=el('submitStatus');if(status)status.textContent='در حال ارسال گزارش به سرور...';
- const payload={id:editingReportId||newReportId(),phase,shift,tehran_time:editingOriginal?.tehran_time||nowTehranIso(),jalali:editingOriginal?.jalali||nowJalali(),produced_melts:num(draft.produced),loaded_trucks:num(draft.loaded),rolling_count:num(draft.rolling),hot_charge:phase==='1'&&!!draft.hot,box_unloading:phase==='1'&&!!draft.box,reporter_name:editingOriginal?.reporter_name||access.full_name||pendingName,marks:marks.filter(m=>num(m.count)>0).map(m=>({type:m.type,count:num(m.count),coupe:validCoupe(m.coupe)})),cut_operator:draft.operator||operators[0],cuts:cuts.filter(c=>num(c.count)>0||String(c.melt||'').trim()).map(c=>({type:c.type,count:num(c.count),melt:String(c.melt||'').trim()})),notes:draft.notes||'',owner_device_id:editingOriginal?.owner_device_id||browserDeviceId(),owner_shift:editingOriginal?.owner_shift||shift,is_delegate:editingOriginal?.is_delegate||false,cycle_status:editingOriginal?.cycle_status||cycleStatusForReport({shift,tehran_time:nowTehranIso()})};
+ const payload={id:editingReportId||newReportId(),phase,shift,tehran_time:editingOriginal?.tehran_time||nowTehranIso(),jalali:editingOriginal?.jalali||nowJalali(),produced_melts:num(draft.produced),loaded_trucks:num(draft.loaded),rolling_count:num(draft.rolling),hot_charge:phase==='1'&&!!draft.hot,box_unloading:phase==='1'&&!!draft.box,reporter_name:editingOriginal?.reporter_name||access.full_name||pendingName,marks:marks.filter(m=>num(m.count)>0).map(m=>({type:m.type,count:num(m.count),coupe:validCoupe(m.coupe)})),cut_operator:draft.operator||operators[0],cuts:cuts.filter(c=>num(c.count)>0||String(c.melt||'').trim()).map(c=>({type:c.type,count:num(c.count),melt:String(c.melt||'').trim()})),notes:draft.notes||'',owner_device_id:editingOriginal?.owner_device_id||browserDeviceId(),owner_shift:editingOriginal?.owner_shift||shift,is_delegate:editingOriginal?.is_delegate||false};
  try{
    // Check current device approval without rerendering the form or losing its values.
    const device=await readDevice();
